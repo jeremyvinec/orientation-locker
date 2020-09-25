@@ -1,114 +1,118 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React from 'react';
 import {
   SafeAreaView,
   StyleSheet,
-  ScrollView,
+  Image,
   View,
-  Text,
+  TextInput,
   StatusBar,
+  ImageBackground,
+  TouchableOpacity,
+  Text,
+  Dimensions
 } from 'react-native';
 
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+class App extends React.Component {
+  
+  
+  render() {
+    return (
+      <>
+        <StatusBar barStyle="dark-content" />
+          <ImageBackground style={styles.Container} source={require('./assets/background.jpg')}>
+            <MainPart />
+          </ImageBackground>
+        
+      </>
+    )
+  }
+}
 
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
+class MainPart extends React.Component {
+  state={
+    screenWidth: null,
+    screenHeight: null,
+  }
+
+  _onLayout(e) {
+    console.log("Screen Orientation Changed...")
+    this.setState({
+      screenWidth: Dimensions.get('window').width,
+      screenHeight: Dimensions.get('window').height
+    })
+
+  }
+  render(){
+    const {screenHeight, screenWidth} = this.state
+    return(
+      <SafeAreaView style={screenHeight > screenWidth ? styles.ContainerPortrait : styles.ContainerLandscape} onLayout={this._onLayout.bind(this)}>
+        <View>
+          <Image source={require('./assets/logo.png')} style={styles.LogoImage}/>
+        </View>
+        <View>
+          <TextInput style={styles.TextInput} placeholder="Email Address" />
+          <TextInput style={styles.TextInput} placeholder="Password" />
+          <TouchableOpacity style={styles.Button}>
+            <Text style={styles.ButtonText}>Login</Text>
+          </TouchableOpacity>
+        </View>
+        
       </SafeAreaView>
-    </>
-  );
-};
+    )
+  }
+  
+}
 
 const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
+  Container: {
+    flex: 1,
+
   },
-  engine: {
-    position: 'absolute',
-    right: 0,
+  ContainerPortrait: {
+    flex: 1,
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  body: {
-    backgroundColor: Colors.white,
+  ContainerLandscape: {
+    flex: 1,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  LogoImage: {
+    width: 200,
+    height: 200,
+    margin: 30,
+    marginBottom: 10,
+    
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
+  TextInput: {
+    width: 240,
+    height: 48,
+    fontSize: 16,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 10,
+    borderColor: 'white',
+    borderWidth: 1,
+    marginTop: 16,
+    padding: 10,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
+  Button: {
+    width: 240,
+    fontSize: 16,
+    backgroundColor: 'rgba(200, 200, 200, 0.8)',
+    padding: 10,
+    marginTop: 16,
+    justifyContent: 'center',
+    alignItems: 'center'
+
   },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
+  ButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold'
+  }
 });
 
 export default App;
